@@ -1,0 +1,21 @@
+# vscode stuff
+.vscode/
+
+# TODO File
+todo
+
+# Server Certs
+*.key
+*.cert
+
+# Database
+cave.db
+
+# Images
+images/
+
+# Node modules
+node_modules/
+
+# macOS
+.DS_Store

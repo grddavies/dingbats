@@ -1,0 +1,28 @@
+{
+  "name": "dingbats",
+  "version": "0.0.2",
+  "main": "app.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
+    "helmet": "^4.3.1",
+    "sqlite3": "^5.0.0",
+    "ws": "^7.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "prettier": "2.2.1"
+  }
+}
