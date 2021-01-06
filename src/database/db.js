@@ -36,9 +36,16 @@ async function getPuzzle(id) {
 async function getNextPuzzle(id) {
     return new Promise((res, rej) => {
         let sql = `SELECT * FROM puzzle WHERE id  > ? LIMIT 1`;
-        db.get(sql, [id], (err, row) => {
+        db.get(sql, [id], async (err, row) => {
             if (err) rej(err);
-            res(row ? row : console.log(`No puzzle found with the id > ${id}`));
+            if (!row) {
+                console.log(
+                    `No puzzle found with the id > ${id}` +
+                        ' fetching first puzzle',
+                );
+                row = await getFirstPuzzle();
+            }
+            res(row);
         });
     });
 }
@@ -55,10 +62,21 @@ async function getMaxPuzzleId() {
     });
 }
 
+async function getFirstPuzzle() {
+    return new Promise((res, rej) => {
+        let sql = `SELECT * FROM puzzle ORDER BY id LIMIT 1`;
+        db.get(sql, (err, row) => {
+            if (err) {rej(err)};
+            res(row);
+        });
+    });
+}
+
 module.exports = {
     init,
     teardown,
     getPuzzle,
     getNextPuzzle,
-    getMaxPuzzleId
+    getMaxPuzzleId,
+    getFirstPuzzle
 }

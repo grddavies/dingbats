@@ -8,14 +8,12 @@ db = require('./database/db');
 const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
-app.use(express.static(path.join(__dirname, 'static'))); // Set static assets folder
-
-// Set up Handlebars view engine
-app.set('views', 'src/views');
 const port = process.env.PORT || 3000;
-app.engine('hbs', exphbs({ extname: 'hbs' }));
-app.set('view engine', 'hbs'); // Use handlebars
+app.use(express.static(path.join(__dirname, 'static'))); // Set static assets folder
 app.use(express.json()); // Use JSON HTTP body parser
+app.set('views', 'src/views'); // Set view folder
+app.engine('hbs', exphbs({ extname: 'hbs' })); // Set up Handlebars view engine
+app.set('view engine', 'hbs');
 app.use(helmet()); // Use Helmet (for setting HTTP headers)
 
 // Path to game data file
@@ -23,7 +21,8 @@ var gameData = path.join(__dirname, 'gamedata.json');
 // Global variable - gameObj
 var gameObj = readGameData();
 
-maxPuzzleId = db.init().then(db.getMaxPuzzleId());
+// TODO put server listen in then block
+db.init()
 
 app.get('/', (req, res) => {
     res.render('index');
@@ -36,7 +35,7 @@ app.get('/ctrl', (req, res) => {
 });
 app.post('/ctrl/startgame', async (req, res) => {
     // If puzzleid does not exist, set to 0 or wrap around at last puzzle
-    if (!gameObj.puzzleid || gameObj.puzzleid >= maxPuzzleId) {
+    if (!gameObj.puzzleid) {
         gameObj.puzzleid = 0;
     }
 
@@ -64,9 +63,6 @@ app.post('/ctrl/startgame', async (req, res) => {
 
 // Post request to ctrl/change_image
 app.post('/ctrl/change_image', async (req, res) => {
-    if (gameObj.puzzleid >= maxPuzzleId) {
-        gameObj.puzzleid = 0;
-    }
     // Get image change message
     let ctrlMessage = req.body.imagectrl;
     switch (ctrlMessage) {
