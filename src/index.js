@@ -35,11 +35,8 @@ app.get('/ctrl', (req, res) => {
     res.render('ctrl');
 });
 app.post('/ctrl/startgame', async (req, res) => {
-    // If puzzleid does not exist, set to 0
-    if (!gameObj.puzzleid) {
-        gameObj.puzzleid = 0;
-        // reset puzzleId at last db entry
-    } else if (gameObj.puzzleid >= maxPuzzleId) {
+    // If puzzleid does not exist, set to 0 or wrap around at last puzzle
+    if (!gameObj.puzzleid || gameObj.puzzleid >= maxPuzzleId) {
         gameObj.puzzleid = 0;
     }
 
