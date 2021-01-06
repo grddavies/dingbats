@@ -1,5 +1,4 @@
 const sqlite3 = require('sqlite3').verbose();
-const shuffleArray = require('../utils/shuffleArray');
 
 const DBFILE = 'src/database/cave.db';
 
@@ -73,7 +72,7 @@ async function getFirstPuzzle() {
     });
 }
 
-async function permuteIds() {
+async function getAllIds() {
     return new Promise((res, rej) => {
         let sql = `SELECT id FROM puzzle`;
         db.all(sql, [], (err, rows) => {
