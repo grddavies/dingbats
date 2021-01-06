@@ -89,5 +89,5 @@ module.exports = {
     getNextPuzzle,
     getMaxPuzzleId,
     getFirstPuzzle,
-    permuteIds
+    getAllIds
 }
