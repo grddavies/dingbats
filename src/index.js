@@ -22,7 +22,7 @@ var gameData = path.join(__dirname, 'gamedata.json');
 var gameObj = readGameData();
 
 // TODO put server listen in then block
-db.init()
+db.start()
 
 app.get('/', (req, res) => {
     res.render('index');

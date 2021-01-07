@@ -4,7 +4,7 @@ const DBFILE = 'src/database/cave.db';
 
 let db;
 
-function init() {
+function start() {
     return new Promise((res, rej) => {
         db = new sqlite3.Database(DBFILE, err => {
             if (err) return rej(err);
@@ -83,7 +83,7 @@ async function getAllIds() {
 }
 
 module.exports = {
-    init,
+    start,
     teardown,
     getPuzzle,
     getNextPuzzle,
