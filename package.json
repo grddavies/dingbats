@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "jest"
   },
   "prettier": {
     "trailingComma": "all",
@@ -22,6 +23,7 @@
     "ws": "^7.4.2"
   },
   "devDependencies": {
+    "jest": "^26.6.3",
     "nodemon": "^2.0.6",
     "prettier": "2.2.1"
   }
