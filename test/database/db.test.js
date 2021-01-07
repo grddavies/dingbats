@@ -10,14 +10,16 @@ const PUZZLE_01 = {
 };
 
 
-beforeEach(() => {db.start()});
-afterEach(() => {db.teardown()});
+beforeAll(() => {return db.start()});
+afterAll(() => {return db.teardown()});
 
 test('can fetch puzzle by ID', async () => {
     puzzle = await db.getPuzzle(1);
     expect(puzzle.id).toEqual(1);
     expect(puzzle.filename).toMatch(/1_01.jpg/);
     expect(puzzle.solution).toMatch(/Cough Mixture/);
+    puzzle = await db.getPuzzle(29);
+    expect(puzzle.id).toEqual(29);
 });
 
 test('`getNextPuzzle` returns a puzzle with higher id', async () => {
