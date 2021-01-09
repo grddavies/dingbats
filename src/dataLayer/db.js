@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 
-const DBFILE = 'src/database/cave.db';
+const DBFILE = 'src/dataLayer/cave.db';
 
 let db;
 
@@ -66,7 +66,7 @@ async function getFirstPuzzle() {
     return new Promise((res, rej) => {
         let sql = `SELECT * FROM puzzle ORDER BY id LIMIT 1`;
         db.get(sql, (err, row) => {
-            if (err) {rej(err)};
+            if (err) { rej(err) };
             res(row);
         });
     });
@@ -76,8 +76,9 @@ async function getAllIds() {
     return new Promise((res, rej) => {
         let sql = `SELECT id FROM puzzle`;
         db.all(sql, [], (err, rows) => {
-            if (err) {rej(err)};
-            res(rows.map(item => item.id));
+            if (err) { rej(err) }
+            // if (!rows) {rej('No rows returned')}
+            res(rows.map((row => {return row.id})));
         });
     });
 }
