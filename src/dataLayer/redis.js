@@ -1,17 +1,17 @@
 redis = require('redis');
-const { promisify } = require('util');
 
-const client = redis.createClient({
-    host: process.env.REDIS_HOST || '127.0.0.1',
-    port: process.env.REDIS_PORT || 6379,
-});
+let client;
 
-// const getAsync = promisify(client.set).bind(client);
-// const setAsync = promisify(client.get).bind(client);
-
-client.on('error', (err) => {
-    console.log('Error ' + err);
-});
+function start() {
+    client = redis.createClient({
+        host: process.env.REDIS_HOST || '127.0.0.1',
+        port: process.env.REDIS_PORT || 6379,
+    });
+    
+    client.on('error', (err) => {
+        console.error(`Error: ${err}`);
+    });
+}
 
 async function set(key, data) {
     return new Promise((resolve, reject) => {
@@ -28,19 +28,34 @@ async function set(key, data) {
 async function get(key) {
     return new Promise((resolve, reject) => {
         client.get(key, (err, res) => {
-            if (err) {reject(err)}
-            resolve(res)
-        })
+            if (err) {
+                reject(err);
+            }
+            resolve(res);
+        });
     });
 }
 
 async function del(key) {
     return new Promise((resolve, reject) => {
         client.unlink(key, (err, res) => {
-            if (err) {console.error(err)};
-            res()
-        })
-    })
+            if (err) {
+                console.error(err);
+            }
+            resolve(res);
+        });
+    });
 }
 
-module.exports = { set, get, del };
+async function teardown() {
+    return new Promise((resolve, reject) => {
+        client.quit((err, res) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(console.log(res));
+        });
+    });
+}
+
+module.exports = { set, get, del, start, teardown };

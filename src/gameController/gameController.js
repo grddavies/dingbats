@@ -1,4 +1,4 @@
-const randomWords = require('random-words');
+// const randomWords = require('random-words');
 const cache = require('../dataLayer/redis');
 // const db = require('../dataLayer/db');
 // const permute = require('../utils/permute');
@@ -10,7 +10,7 @@ class Game {
     constructor(timerLength) {
         // ID is Redis cache index
         // this.id = randomWords({ exactly: 2, join: '-' });
-        this.id = 1;
+        this.id = 999;
         this.timerLength = timerLength; // Round duration
         this.startTime = new Date().toISOString(); // Date created
         this.currentPuzzle = 1; // ID of current puzzle
@@ -53,8 +53,8 @@ async function readGame(gameid) {
 
 }
 
-function delGame(gameid) {
+function deleteGame(gameid) {
     cache.del(gameid)
 }
 
-module.exports = {Game, writeGame, readGame};
+module.exports = {Game, writeGame, readGame, deleteGame};

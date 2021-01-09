@@ -1,5 +1,5 @@
-// const db = require('../../src/dataLayer/db');
-const {Game, writeGame, readGame} = require('../../src/gameController/gameController');
+const {Game, writeGame, readGame, deleteGame} = require('../../src/gameController/gameController');
+const cache = require('../../src/dataLayer/redis');
 
 // test('Game obj ids are string', () => {
 //     let game = new Game(3);
@@ -33,9 +33,12 @@ test('Game.setRoundEndTime() creates future timestamp', () => {
     expect(new Date(timestamp).getTime() > now.getTime()).toBe(true);
 });
 
-test('can write game to cache', async () => {
+test('can write game-like object to cache', async () => {
+    cache.start();
     let game = new Game(3);
     await writeGame(game);
     let result = await readGame(game.id);
     expect(result.id).toBe(game.id)
+    await deleteGame(game.id);
+    await cache.teardown()
 })

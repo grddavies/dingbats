@@ -4,7 +4,7 @@ const socketeer = require('../socketeer/socketeer')
 
 module.exports = async (req, res) => {
     // let gameid = req.body.gameid;
-    let gameid = 1;
+    let gameid = 999;
     let ctrlMessage = req.body.imagectrl;
     let game = await readGame(gameid);
     // Get image change message
@@ -21,9 +21,9 @@ module.exports = async (req, res) => {
             // store skipped IDs in gameObj
             break;
     }
-    writeGame(game)
     var nextPuzzle = await db.getNextPuzzle(game.currentPuzzle);
     game.currentPuzzle = nextPuzzle.id;
+    writeGame(game)
     // write message to send to WS Clients
     let msg = JSON.stringify({
         type: 'change_image',
