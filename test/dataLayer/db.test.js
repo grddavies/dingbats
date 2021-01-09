@@ -1,4 +1,4 @@
-const db = require('../../src/database/db');
+const db = require('../../src/dataLayer/db');
 
 const PUZZLE_01 = {
     id: 1,
@@ -9,9 +9,12 @@ const PUZZLE_01 = {
     auth_id: 1,
 };
 
-
-beforeAll(() => {return db.start()});
-afterAll(() => {return db.teardown()});
+beforeAll(() => {
+    return db.start();
+});
+afterAll(() => {
+    return db.teardown();
+});
 
 test('can fetch puzzle by ID', async () => {
     puzzle = await db.getPuzzle(1);
@@ -34,4 +37,20 @@ test('`getNextPuzzle` wraps around after last puzzle ID', async () => {
     result = await db.getNextPuzzle(MAX_PUZZLE_ID);
     MIN_PUZZLE_ID = await db.getFirstPuzzle();
     expect(result).toEqual(MIN_PUZZLE_ID);
+});
+
+test('`getAllIds` returns an array', async () => {
+    result = await db.getAllIds();
+    expect(Array.isArray(result)).toBe(true);
+});
+
+test('`getAllIds` returns an array of Integers', async () => {
+    result = await db.getAllIds();
+    expect(result[0]).toBe(1);
+    expect(Number.isInteger(result[result.length - 1])).toBe(true);
+    expect(
+        result.map(Number.isInteger).every((e) => {
+            return e === true;
+        }),
+    ).toBe(true);
 });
