@@ -53,7 +53,7 @@ async function teardown() {
             if (err) {
                 reject(err);
             }
-            resolve(console.log(res));
+            resolve(console.log(`Redis quit: ${res}`));
         });
     });
 }

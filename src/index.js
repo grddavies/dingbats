@@ -5,8 +5,8 @@ const path = require('path');
 const https = require('https');
 const fs = require('fs');
 const db = require('./dataLayer/db');
-const cache = require('./dataLayer/redis')
-const {startGame, changeImage} = require('./routes');
+const cache = require('./dataLayer/redis');
+const { startGame, changeImage } = require('./routes');
 const socketeer = require('./socketeer/socketeer');
 
 const app = express();
@@ -19,11 +19,10 @@ app.set('view engine', 'hbs');
 app.use(helmet()); // Use Helmet (for setting HTTP headers)
 
 /**
- *  Can sqlite and redis clients be started
+ *  Should sqlite and redis clients be started
  * asynchronously and server listen after something like:
  * `Promise.all([db.start(), redis.connect()])` ?
  * */
-
 db.start();
 cache.start();
 
@@ -53,3 +52,13 @@ socketeer.start(server);
 
 // // HTTP server
 // const server = app.listen(port, () => console.log(`App listening to port ${port}`));
+
+const gracefulShutdown = () => {
+    Promise.all([db.teardown(), cache.teardown()])
+        .catch(() => {})
+        .then(() => process.exit());
+};
+
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGUSR2', gracefulShutdown); // Sent by nodemon
