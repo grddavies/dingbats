@@ -1,14 +1,12 @@
 const express = require('express');
-const helmet = require('helmet');
 const exphbs = require('express-handlebars');
+const helmet = require('helmet');
 const path = require('path');
 const https = require('https');
 const fs = require('fs');
 const db = require('./dataLayer/db');
-const startGame = require('./routes/startGame');
-const changeImage = require('./routes/changeImage');
+const {startGame, changeImage} = require('./routes');
 const socketeer = require('./socketeer/socketeer');
-const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 const port = process.env.PORT || 3000;
