@@ -1,7 +1,6 @@
 var interval
 socketClient.onmessage = (event) => {
   var msg = JSON.parse(event.data);
-  var CountdownIsRunning = 0;
   switch (msg.type) {
     case "start":
       // Change image
