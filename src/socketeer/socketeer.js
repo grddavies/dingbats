@@ -6,7 +6,7 @@ function start(server) {
     wsServer = new ws.Server({ server });
     wsServer.on('connection', (socketClient) => {
         console.log('connected'); // todo give name to client
-        console.log('client Set length: ', wsServer.clients.size);
+        console.log('Number of clients: ', wsServer.clients.size);
 
         socketClient.on('close', (socketClient) => {
             console.log('closed');

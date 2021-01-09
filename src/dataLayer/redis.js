@@ -19,7 +19,7 @@ async function set(key, data) {
             if (err) {
                 reject(err);
             } else {
-                resolve(console.log('cached_something: ' + res));
+                resolve();
             }
         });
     });

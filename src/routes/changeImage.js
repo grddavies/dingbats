@@ -7,7 +7,6 @@ module.exports = async (req, res) => {
     let gameid = 1;
     let ctrlMessage = req.body.imagectrl;
     let game = await readGame(gameid);
-    console.log(game)
     // Get image change message
     switch (ctrlMessage) {
         // If correct, do something
