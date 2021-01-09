@@ -31,6 +31,7 @@ module.exports = async (req, res) => {
         solution: nextPuzzle.solution,
         shown: game.shown,
         score: game.score,
+        endtime: game.curRoundEnd
     });
     socketeer.push(msg);
     res.end();

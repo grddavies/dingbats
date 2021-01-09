@@ -1,22 +1,17 @@
+var interval
 socketClient.onmessage = (event) => {
   var msg = JSON.parse(event.data);
+  var CountdownIsRunning = 0;
   switch (msg.type) {
     case "start":
       // Change image
       changeImage(msg.imagename);
-      // Start timer
-      let timeNow = new Date().getTime();
-      timeEnd = new Date(msg.endtime);
-      // time left in ms
-      let timeLeft = timeEnd - timeNow;
-      // where to display timer
-      display = document.querySelector("#time");
-      startTimer(timeLeft / 1000, display);
+      setTimer(msg.endtime)
 
       if (location.pathname == "/ctrl") {
         // Display solution
         changeSoln(msg.solution);
-        // Hide start button
+        // Hide start button and show game buttons
         document.querySelector("#startbutton").style.display = "none";
         document.querySelector("#setduration").style.display = "none";
         document.querySelector("#correctbutton").style.display = "flex";
@@ -30,21 +25,36 @@ socketClient.onmessage = (event) => {
       changeSoln(msg.solution);
       document.querySelector("#score").innerHTML = msg.score;
       document.querySelector("#shown").innerHTML = msg.shown;
+      setTimer(msg.endtime)
       break;
   }
 };
+
+function setTimer(endTime) {
+       // Start timer
+       let timeNow = new Date().getTime();
+       timeEnd = new Date(endTime);
+       // time left in ms
+       let timeLeft = timeEnd - timeNow;
+       // where to display timer
+       display = document.querySelector("#time");
+       if (interval) {
+         clearInterval(interval);
+       } 
+       interval = startTimer(timeLeft / 1000, display);
+}
 
 function startTimer(duration, display) {
   var timer = duration,
     minutes,
     seconds;
   var interval = setInterval(function () {
-    console.log("i");
     if (--timer <= 0) {
       timer = 0;
       // display.style.color = "red";
       display.classList.add("blinking");
       clearInterval(interval);
+      console.log(interval);
     }
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
@@ -54,6 +64,7 @@ function startTimer(duration, display) {
 
     display.textContent = minutes + ":" + seconds;
   }, 1000);
+  return(interval)
 }
 
 function changeImage(imageName) {
