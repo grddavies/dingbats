@@ -21,10 +21,10 @@ startbtn.addEventListener("click", function () {
 
 nextbtn.addEventListener("click", function () {
   let json = `{"imagectrl":"correct"}`;
-  sendData(json, "/ctrl/change_image");
+  sendData(json, "/ctrl/changeimage");
 });
 
 passbtn.addEventListener("click", function () {
   let json = `{"imagectrl":"pass"}`;
-  sendData(json, "/ctrl/change_image");
+  sendData(json, "/ctrl/changeimage");
 });
