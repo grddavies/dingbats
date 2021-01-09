@@ -5,6 +5,7 @@ const path = require('path');
 const https = require('https');
 const fs = require('fs');
 const db = require('./dataLayer/db');
+const cache = require('./dataLayer/redis')
 const {startGame, changeImage} = require('./routes');
 const socketeer = require('./socketeer/socketeer');
 
@@ -24,6 +25,7 @@ app.use(helmet()); // Use Helmet (for setting HTTP headers)
  * */
 
 db.start();
+cache.start();
 
 app.get('/', (req, res) => {
     res.render('index');
