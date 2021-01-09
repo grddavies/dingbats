@@ -53,8 +53,8 @@ async function readGame(gameid) {
 
 }
 
-function delGame(gameid) {
+function deleteGame(gameid) {
     cache.del(gameid)
 }
 
-module.exports = {Game, writeGame, readGame};
+module.exports = {Game, writeGame, readGame, deleteGame};
