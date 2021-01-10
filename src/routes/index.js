@@ -1,4 +1,6 @@
 module.exports = {
-    changeImage: require('./changeImage.js'),
-    startGame: require('./startGame.js'),
+    changeImage: require('./changeImage'),
+    startGame: require('./startGame'),
+    player: require('./player'),
+    quizmaster: require('./quizmaster')
 }
