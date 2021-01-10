@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars');
 const helmet = require('helmet');
 const path = require('path');
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const db = require('./dataLayer/db');
 const cache = require('./dataLayer/redis');
@@ -10,9 +11,17 @@ const { startGame, changeImage } = require('./routes');
 const socketeer = require('./socketeer/socketeer');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 443;
+const httpPort = process.env.HTTPPORT || 80;
 app.use(express.static(path.join(__dirname, 'static'))); // Set static assets folder
 app.use(express.json()); // Use JSON HTTP body parser
+// redirect http to https
+app.use(function(req, res, next) {
+    if(!req.secure) {
+      return res.redirect(`https://${req.get('Host')}${req.baseUrl}`);
+    } 
+    next();
+  });
 app.set('views', 'src/views'); // Set view folder
 app.engine('hbs', exphbs({ extname: 'hbs' })); // Set up Handlebars view engine
 app.set('view engine', 'hbs');
@@ -50,8 +59,8 @@ server = https.createServer(
 server.listen(port, () => console.log(`App listening to port ${port}`));
 socketeer.start(server);
 
-// // HTTP server
-// const server = app.listen(port, () => console.log(`App listening to port ${port}`));
+// HTTP server
+const httpServer = app.listen(httpPort, () => console.log(`HTTP listening to port ${httpPort}`));
 
 const gracefulShutdown = () => {
     Promise.all([db.teardown(), cache.teardown()])
