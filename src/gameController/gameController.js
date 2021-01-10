@@ -1,60 +1,59 @@
 // const randomWords = require('random-words');
 const cache = require('../dataLayer/redis');
-// const db = require('../dataLayer/db');
-// const permute = require('../utils/permute');
+const db = require('../dataLayer/db');
+const permute = require('../utils/permute');
 
-/**
- * Some description for Game object
- */
-class Game {
-    constructor(timerLength) {
-        // ID is Redis cache index
-        // this.id = randomWords({ exactly: 2, join: '-' });
-        this.id = 999;
-        this.timerLength = timerLength; // Round duration
-        this.startTime = new Date().toISOString(); // Date created
-        this.currentPuzzle = 1; // ID of current puzzle
-        this.imagefile = 'newgame.png'; // name of current puzzle file
-        this.shown = 0; // Num cards shown in  game
-        this.score = 0; // Num correct answers
-        this.curRoundEnd = undefined; // time current round ends
-    }
+function newGame(timerLength) {
+    return {
+        id: 999,
+        timerLength: timerLength,
+        imagefile: 'newgame.png',
+        shown: 0,
+        score: 0,
+    };
+}
 
-    setRoundEndTime(game) {
-        let timeNow = new Date().getTime();
-        let endTime = new Date(timeNow + this.timerLength * 60000);
-        this.curRoundEnd = endTime.toISOString();
-        return this;
-    }
+function setTimer(game) {
+    let timeNow = new Date().getTime();
+    let endTime = new Date(timeNow + game.timerLength * 60000);
+    game.curRoundEnd = endTime.toISOString();
+    return game;
+}
 
-    // // // TODO: find workaround allowing async call in a getter
-    // get cardOrder() {
-    //     return this.shuffleCards();
-    // }
+async function shuffleCards(game) {
+    let allIDs = await db.getAllIds();
+    game.cardOrder = permute(allIDs);
+    return game;
+}
 
-    // shuffleCards() {
-    //     db.getAllIds().then((allIDs) => {return permute(allIDs)});
-    //     // return permute(allIDs);
-    // }
+async function nextPuzzle(game) {
+    let numCards = game.cardOrder.length;
+    let pid = game.cardOrder[game.shown % numCards];
+    let nextPuzzle = await db.getPuzzle(pid);
+    return nextPuzzle;
 }
 
 function writeGame(game) {
-    // for (key of Object.keys(obj)) {
-    //     let keyURI = game.id + key;
-    //     cache.set(keyURI, JSON.stringify(game.key));
-    // }
     let data = JSON.stringify(game);
     return cache.set(game.id, data);
 }
 
 async function readGame(gameid) {
     let stringified = await cache.get(gameid);
-    return JSON.parse(stringified)
-
+    return JSON.parse(stringified);
 }
 
 function deleteGame(gameid) {
-    cache.del(gameid)
+    cache.del(gameid);
 }
 
-module.exports = {Game, writeGame, readGame, deleteGame};
+module.exports = {
+    newGame,
+    setTimer,
+    shuffleCards,
+    nextPuzzle,
+    writeGame,
+    readGame,
+    deleteGame,
+    shuffleCards,
+};
