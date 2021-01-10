@@ -7,7 +7,7 @@ const http = require('http');
 const fs = require('fs');
 const db = require('./dataLayer/db');
 const cache = require('./dataLayer/redis');
-const { startGame, changeImage } = require('./routes');
+const { startGame, changeImage, player, quizmaster } = require('./routes');
 const socketeer = require('./socketeer/socketeer');
 
 const app = express();
@@ -15,13 +15,14 @@ const port = process.env.PORT || 443;
 const httpPort = process.env.HTTPPORT || 80;
 app.use(express.static(path.join(__dirname, 'static'))); // Set static assets folder
 app.use(express.json()); // Use JSON HTTP body parser
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies (as sent by HTML forms)
 // redirect http to https
-app.use(function(req, res, next) {
-    if(!req.secure) {
-      return res.redirect(`https://${req.get('Host')}${req.baseUrl}`);
-    } 
+app.use(function (req, res, next) {
+    if (!req.secure) {
+        return res.redirect(`https://${req.get('Host')}${req.baseUrl}`);
+    }
     next();
-  });
+});
 app.set('views', 'src/views'); // Set view folder
 app.engine('hbs', exphbs({ extname: 'hbs' })); // Set up Handlebars view engine
 app.set('view engine', 'hbs');
@@ -38,12 +39,9 @@ cache.start();
 app.get('/', (req, res) => {
     res.render('index');
 });
-app.get('/play', (req, res) => {
-    res.render('play');
-});
-app.get('/ctrl', (req, res) => {
-    res.render('ctrl');
-});
+
+app.post('/play', player);
+app.post('/ctrl', quizmaster);
 app.post('/ctrl/startgame', startGame);
 app.post('/ctrl/changeimage', changeImage);
 
@@ -60,7 +58,9 @@ server.listen(port, () => console.log(`App listening to port ${port}`));
 socketeer.start(server);
 
 // HTTP server
-const httpServer = app.listen(httpPort, () => console.log(`HTTP listening to port ${httpPort}`));
+const httpServer = app.listen(httpPort, () =>
+    console.log(`HTTP listening to port ${httpPort}`),
+);
 
 const gracefulShutdown = () => {
     Promise.all([db.teardown(), cache.teardown()])
