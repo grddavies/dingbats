@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, 'static'))); // Set static assets fo
 app.use(express.json()); // Use JSON HTTP body parser
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies (as sent by HTML forms)
 // redirect http to https
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     if (!req.secure) {
         return res.redirect(`https://${req.get('Host')}${req.baseUrl}`);
     }
@@ -28,20 +28,20 @@ app.engine('hbs', exphbs({ extname: 'hbs' })); // Set up Handlebars view engine
 app.set('view engine', 'hbs');
 app.use(helmet()); // Use Helmet (for setting HTTP headers)
 
-/**
- *  Should sqlite and redis clients be started
- * asynchronously and server listen after something like:
- * `Promise.all([db.start(), redis.connect()])` ?
- * */
 db.start();
 cache.start();
 
 app.get('/', (req, res) => {
     res.render('index');
 });
-
-app.post('/play', player);
-app.post('/ctrl', quizmaster);
+app.get('/play', player);
+app.post('/play', (req, res) => {
+    res.redirect(303, '/play');
+});
+app.get('/ctrl', quizmaster);
+app.post('/ctrl', (req, res) => {
+    res.redirect(303, '/ctrl');
+});
 app.post('/ctrl/startgame', startGame);
 app.post('/ctrl/changeimage', changeImage);
 

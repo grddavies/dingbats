@@ -1,7 +1,10 @@
 <body>
+    <script defer src="scripts/nickname.js"></script>
+    <script defer src="scripts/ws_status.js"></script>
     <script defer src="scripts/ws_play.js"></script>
+    <span id="statusdot" class="dot"></span>
     <div class="vcontainer">
-        <h1>Player: {{nickname}}</h1>
+        <h1 id="nickname"></h1>
         <div>
             <img id="image" class="center" src="images/newgame.png" alt="Dingbat clue">
         </div>

@@ -1,8 +1,11 @@
 <body>
+    <script defer src="scripts/nickname.js"></script>
+    <script defer src="scripts/ws_status.js"></script>
     <script defer src="scripts/ws_play.js"></script>
     <script defer src="scripts/ctrl.js"></script>
+    <span id="statusdot" class="dot"></span>
     <div class="vcontainer">
-        <h1>Quizmaster: {{nickname}}</h1>
+        <h1 id="nickname"></h1>
         <div>
             <img id="image" class="center" src="images/newgame.png" alt="Dingbat clue">
         </div>
