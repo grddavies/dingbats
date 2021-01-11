@@ -1,26 +1,37 @@
 const ws = require('ws');
+const uuid = require('uuid');
 
-let wsServer;
+// wsMap is not currently useful,
+const wsMap = new Map();
+let wss;
 
-function start(server) {
-    wsServer = new ws.Server({ server });
-    wsServer.on('connection', (socketClient) => {
-        console.log('connected'); // todo give name to client
-        console.log('Number of clients: ', wsServer.clients.size);
-
-        socketClient.on('close', (socketClient) => {
-            console.log('closed');
-            console.log('Number of clients: ', wsServer.clients.size);
-        });
+function start(server, messageHandler) {
+  wss = new ws.Server({ server });
+  wss.on('connection', (ws) => {
+    // Assign an unique ID to ws connections
+    const id = uuid.v4();
+    wsMap.set(id, ws);
+    console.log(`${id} connected\nNum clients: `, wss.clients.size);
+    ws.on('message', (data) => {
+      messageHandler(data, id);
     });
+    ws.on('close', (ws) => {
+      console.log(`${id} closed\nNum clients: `, wss.clients.size);
+    });
+  });
 }
 
-function push(msg) {
-    wsServer.clients.forEach((client) => {
-        if (client.readyState === ws.OPEN) {
-            client.send(msg);
-        }
-    });
+function broadcast(msg) {
+  wss.clients.forEach((ws) => {
+    if (ws.readyState === ws.OPEN) {
+      ws.send(msg);
+    }
+  });
 }
 
-module.exports = { start, push };
+function send(msg, id) {
+  let ws = wsMap.get(id);
+  ws.send(msg);
+}
+
+module.exports = { start, send, broadcast };

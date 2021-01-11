@@ -4,13 +4,13 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
     "test": "jest"
   },
   "prettier": {
     "trailingComma": "all",
-    "tabWidth": 4,
+    "tabWidth": 2,
     "useTabs": false,
     "semi": true,
     "singleQuote": true

@@ -1,36 +1,36 @@
 body {
-    background-color: whitesmoke;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 3vw;
+  background-color: whitesmoke;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 3vw;
 }
 
 h1 {
-    color: black;
-    font-family: 'Roboto Mono', monospace;
-    text-align: center;
-    margin: 0;
+  color: black;
+  font-family: 'Roboto Mono', monospace;
+  text-align: center;
+  margin: 0;
 }
 
 .vcontainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    row-gap: 5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 5vh;
 }
 
 .hcontainer {
-    display: flex;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    flex-direction: row;
-    justify-content: space-between;
-    column-gap: 5vw;
+  display: flex;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: row;
+  justify-content: space-between;
+  column-gap: 5vw;
 }
 
 .timer {
-    color: black;
-    font-size: 200%;
+  color: black;
+  font-size: 200%;
 }
 
 .center {
@@ -41,39 +41,49 @@ h1 {
 }
 
 .blinking {
-    animation:blinkingText 0.8s infinite;
+  animation: blinkingText 0.8s infinite;
 }
 @keyframes blinkingText {
-    0%{     color: #B00020;    }
-    49%{    color: #B00020; }
-    60%{    color: transparent; }
-    99%{    color: transparent; }
-    100%{   color: #B00020;    }
+  0% {
+    color: #b00020;
+  }
+  49% {
+    color: #b00020;
+  }
+  60% {
+    color: transparent;
+  }
+  99% {
+    color: transparent;
+  }
+  100% {
+    color: #b00020;
+  }
 }
 
 .ctrlpanel {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    column-gap: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  column-gap: 0;
 }
 
 .dot {
-    width: 1vw;
-    height: 1vw;
-    background-color: #B00020;
-    border-radius: 50%;
-    display: block;
-    position:absolute;
-    top:1%;
-    right:1%;
+  width: 1vw;
+  height: 1vw;
+  background-color: #b00020;
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+  top: 1%;
+  right: 1%;
 }
 
 .center-screen {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-text-align: center;
-min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
 }
