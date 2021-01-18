@@ -11,6 +11,17 @@ h1 {
   margin: 0;
 }
 
+input, select, textarea {  
+  -ms-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+  -webkit-box-sizing:border-box; 
+}
+
+input:focus::placeholder {
+  color: transparent;
+}
+
 .vcontainer {
   display: flex;
   flex-direction: column;
@@ -86,4 +97,33 @@ h1 {
   align-items: center;
   text-align: center;
   min-height: 100vh;
+}
+
+/* .textin {
+  border:8px solid #ccc;
+  padding: 8px;
+  margin:10px 0 2.5px 0;
+} */
+
+.buttontext{
+  caret-color: rgb(218, 205, 205);
+  background:0 0;
+  border:0 solid ;
+  position:relative;
+  height:36px;
+  margin:0;
+  min-width:64px;
+  padding:0 16px;
+  display:inline-block;
+  font-family:"Roboto Mono","Helvetica","Arial",sans-serif;
+  font-size:18px;
+  font-weight:500;
+  letter-spacing:0;
+  overflow:hidden;
+  outline:none;
+  /* text-transform:uppercase; */
+  text-decoration:none;
+  text-align:center;
+  line-height:36px;
+  vertical-align:middle;
 }
