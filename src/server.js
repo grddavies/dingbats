@@ -7,17 +7,15 @@ const https = require('https');
 const fs = require('fs');
 const db = require('./dataLayer/db');
 const cache = require('./dataLayer/redis');
-const { player, quizmaster } = require('./routes');
+const { player, quizmaster, auth  } = require('./routes');
 const socketeer = require('./socketeer/socketeer');
 const messageHandler = require('./gameController/messageHandler');
-const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = process.env.PORT || 443;
 const httpPort = process.env.HTTPPORT || 80;
 app.use(express.static(path.join(__dirname, 'static'))); // Set static assets folder
 app.use(express.json()); // Use JSON HTTP body parser
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies (as sent by HTML forms)
 // redirect http to https
 app.use((req, res, next) => {
   if (!req.secure) {
@@ -45,21 +43,9 @@ cache.start();
 app.get('/', (req, res) => {
   res.render('index');
 });
-app.post('/auth', (req, res) => {
-  // Process post req to authorize a player
-  const { player } = req.body;
-  const accessToken = jwt.sign(player, process.env.ACCESS_TOKEN_SECRET);
-  let json = JSON.stringify({ player: player, accessToken: accessToken });
-  res.json(json);
-});
-app.get('/play', authToken, player);
-// app.post('/play', (req, res) => {
-//   res.redirect(303, '/play');
-// });
-app.get('/ctrl', quizmaster);
-app.post('/ctrl', (req, res) => {
-  res.redirect(303, '/ctrl');
-});
+app.post('/auth', auth.route);
+app.get('/play', auth.verifyToken, player);
+app.get('/ctrl', auth.verifyToken, quizmaster);
 
 // Set server to listen
 server = https.createServer(
@@ -85,19 +71,3 @@ const gracefulShutdown = () => {
 process.on('SIGINT', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
 process.on('SIGUSR2', gracefulShutdown); // Sent by nodemon
-
-function authToken(req, res, next) {
-  // console.log(req.headers)
-  const { authorization, cookie } = req.headers;
-  console.log(cookie);
-  if (authorization) {
-    var token = authorization.split(' ')[1];
-  } else if (cookie) {
-    var token = cookie.split('=')[1];
-  } else return res.sendStatus(401);
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.player = user;
-    next();
-  });
-}

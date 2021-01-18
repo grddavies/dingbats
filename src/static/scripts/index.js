@@ -1,5 +1,6 @@
 const nickname = document.querySelector('#nickname');
-const joinbtn = document.querySelector('#join');
+const joinbtn = document.querySelector('#joinbutton');
+const ctrlbtn = document.querySelector('#ctrlbutton');
 
 validate = () => {
   var input = nickname;
@@ -36,12 +37,13 @@ window.onbeforeunload = () => {
 nickname.addEventListener('input', validate);
 window.onload = validate();
 
-joinbtn.addEventListener('click', fetchTokenRedirect('/play'), {once: true});
-
-async function fetchTokenRedirect(url) {
-  // Fetch a token from /auth endpoint
-  let json = JSON.stringify({ player: nickname.value });
-  let response = await fetch('/auth', {
+fetchTokenRedirect = async (url) => {
+  // Fetch a token from /auth endpoint and redirect to URL
+  const json = JSON.stringify({
+    player: nickname.value,
+    userAgent: navigator.userAgent,
+  });
+  const response = await fetch('/auth', {
     method: 'post',
     body: json,
     headers: {
@@ -50,13 +52,17 @@ async function fetchTokenRedirect(url) {
     mode: 'same-origin',
   });
   if (response.ok) {
-    let data = await response.json();
-    const { accessToken } = JSON.parse(data);
-    // write short-lasting cookie
-    document.cookie = `token=${accessToken}; Max-Age=2`;
-    // //store token in localstorage
-    // localStorage.setItem('refreshToken', accessToken);
+    const accessToken = await response.text();
+    // set cookie to allow access to /play, /ctrl
+    document.cookie = `token=${accessToken};`;
     // Navigate to URL
-    location = url
+    document.location.href = url;
   }
-}
+};
+
+joinbtn.addEventListener('click', () => {
+  fetchTokenRedirect('play');
+});
+ctrlbtn.addEventListener('click', () => {
+  fetchTokenRedirect('ctrl');
+});
