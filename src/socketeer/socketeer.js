@@ -17,6 +17,7 @@ function start(server, messageHandler) {
     });
     ws.on('close', (ws) => {
       console.log(`${id} closed\nNum clients: `, wss.clients.size);
+      wsMap.delete(id);
     });
   });
 }

@@ -1,4 +1,5 @@
 const nickname = document.querySelector('#nickname');
+const joinbtn = document.querySelector('#join');
 
 validate = () => {
   var input = nickname;
@@ -34,3 +35,28 @@ window.onbeforeunload = () => {
 
 nickname.addEventListener('input', validate);
 window.onload = validate();
+
+joinbtn.addEventListener('click', fetchTokenRedirect('/play'), {once: true});
+
+async function fetchTokenRedirect(url) {
+  // Fetch a token from /auth endpoint
+  let json = JSON.stringify({ player: nickname.value });
+  let response = await fetch('/auth', {
+    method: 'post',
+    body: json,
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    mode: 'same-origin',
+  });
+  if (response.ok) {
+    let data = await response.json();
+    const { accessToken } = JSON.parse(data);
+    // write short-lasting cookie
+    document.cookie = `token=${accessToken}; Max-Age=2`;
+    // //store token in localstorage
+    // localStorage.setItem('refreshToken', accessToken);
+    // Navigate to URL
+    location = url
+  }
+}

@@ -17,7 +17,6 @@ socketClient.onopen = (event) => {
 
 socketClient.onclose = () => {
   document.querySelector('#statusdot').style.backgroundColor = '#B00020';
-  map.delete(id);
 };
 
 var interval;
