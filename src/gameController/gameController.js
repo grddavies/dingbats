@@ -10,6 +10,7 @@ function newGame(timerLength) {
     imagefile: 'newgame.png',
     shown: 0,
     score: 0,
+    players: {},
   };
 }
 

@@ -40,8 +40,8 @@ window.onload = validate();
 fetchTokenRedirect = async (url) => {
   // Fetch a token from /auth endpoint and redirect to URL
   const json = JSON.stringify({
-    player: nickname.value,
-    userAgent: navigator.userAgent,
+    playername: nickname.value,
+    // userAgent: navigator.userAgent,
   });
   const response = await fetch('/auth', {
     method: 'post',

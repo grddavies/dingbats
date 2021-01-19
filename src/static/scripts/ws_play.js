@@ -3,12 +3,12 @@ const socketClient = new WebSocket(
     location.port
   }`,
 );
-
 socketClient.onopen = (event) => {
   // Send msg to server with nickname
+  const token = document.cookie.split('=')[1];
   let msg = {
     type: 'join',
-    name: window.localStorage.getItem('nickname'),
+    token: token,
   };
   socketClient.send(JSON.stringify(msg));
   // Update status dot with friendly green

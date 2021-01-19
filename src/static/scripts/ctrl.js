@@ -3,8 +3,7 @@ const duration = document.querySelector('#duration');
 const correctbtn = document.querySelector('#correctbutton');
 const passbtn = document.querySelector('#passbutton');
 
-
-startbtn.addEventListener('click', function () {
+startbtn.addEventListener('click', () => {
   let msg = JSON.stringify({
     type: 'start',
     duration: duration.value,
@@ -14,7 +13,7 @@ startbtn.addEventListener('click', function () {
   }
 });
 
-correctbtn.addEventListener('click', function () {
+correctbtn.addEventListener('click', () => {
   let msg = JSON.stringify({
     type: 'change_image',
     imagectrl: 'correct',
@@ -24,7 +23,7 @@ correctbtn.addEventListener('click', function () {
   }
 });
 
-passbtn.addEventListener('click', function () {
+passbtn.addEventListener('click', () => {
   let msg = JSON.stringify({
     type: 'change_image',
     imagectrl: 'pass',
