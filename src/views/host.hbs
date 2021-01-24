@@ -1,0 +1,40 @@
+<script defer src='scripts/host.js'></script>
+<div class="vcontainer center-screen">
+    <h1>Set up a Game</h1>
+    <div>
+        <div id="settings">
+            <div style="min-width: 40vw; margin-top: 40px; margin-bottom: 40px;">
+                <input id="slider-dur" class="mdl-slider mdl-js-slider" type="range" min="0.5" max="15" step="0.5"
+                    value="2" tabindex="0" oninput="duration.value=Number.parseFloat(value).toFixed(1)">
+                <span>Round duration </span><output id="duration">2.0</output><span> mins</span>
+            </div>
+            <div style="min-width: 40vw; margin-top: 40px; margin-bottom: 40px;">
+                <input id="slider-mp" class="mdl-slider mdl-js-slider" type="range" min="2" max="16" step="1" value="2"
+                    tabindex="0" oninput="nplayers.value=value">
+                <span>Max players: </span><output id="nplayers">2</output>
+            </div>
+        </div>
+        <div style="width:400px; margin:auto">
+            <button id="fetchbutton" style="margin-left: auto; margin-right: auto; min-width:160px;"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Get Code
+            </button>
+            <div id="codecontainer"
+                style="min-height:45px; background-color: rgba(0, 0, 0, 0.12); border-radius: 10px; display: none"
+                class="buttontext">
+                <img id="copybutton" src="images/copy-solid.svg" style="cursor: copy;" alt="copy icon" height="20px">
+                <span id="gamecode"></span>
+            </div>
+        </div>
+        <div style="padding: 15px;">
+            <button id="playbutton" style="margin-left: auto; margin-right: auto; min-width:160px; display: none"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                Play
+            </button>
+        </div>
+    </div>
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+</div>

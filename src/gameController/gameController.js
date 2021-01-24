@@ -3,14 +3,19 @@ const cache = require('../dataLayer/redis');
 const db = require('../dataLayer/db');
 const permute = require('../utils/permute');
 
-function newGame(timerLength) {
+function newGame(host, timerLength, maxPlayers) {
   return {
+    // id: randomWords({exactly: 2, join: '-'}),
     id: 999,
+    host: host,
     timerLength: timerLength,
     imagefile: 'newgame.png',
     shown: 0,
     score: 0,
     players: {},
+    maxPlayers: maxPlayers,
+    cardOrder: [],
+    cardScore: [],
   };
 }
 

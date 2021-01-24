@@ -5,10 +5,8 @@ module.exports = async (req, res) => {
   // Add player to game object
   var game = await gc.readGame(999);
   if (game) {
-    console.log(player);
     // Check if playerid in players
     if (!game.players[player.playerid]) {
-      console.log('if statement did!');
       // add playerid as attr of game.players obj
       game.players[player.playerid] = null;
       await gc.writeGame(game);

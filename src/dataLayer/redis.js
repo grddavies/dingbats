@@ -40,7 +40,7 @@ async function del(key) {
   return new Promise((resolve, reject) => {
     client.unlink(key, (err, res) => {
       if (err) {
-        console.error(err);
+        reject(err);
       }
       resolve(res);
     });
@@ -49,11 +49,14 @@ async function del(key) {
 
 async function teardown() {
   return new Promise((resolve, reject) => {
-    client.quit((err, res) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(console.log(`Redis quit: ${res}`));
+    client.flushdb((err, res) => {
+      if (err) reject(err);
+      client.quit((err, res) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(console.log(`Redis quit: ${res}`));
+      });
     });
   });
 }

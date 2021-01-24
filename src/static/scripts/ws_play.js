@@ -3,6 +3,7 @@ const socketClient = new WebSocket(
     location.port
   }`,
 );
+
 socketClient.onopen = (event) => {
   // Send msg to server with nickname
   const token = document.cookie.split('=')[1];
@@ -76,17 +77,16 @@ function handleMessage(event) {
       // Change image
       changeImage(msg.imagename);
       setTimer(msg.endtime);
-
-      if (location.pathname == '/ctrl') {
-        // Display solution
-        changeSoln(msg.solution);
-        // Hide start button and show game buttons
-        document.querySelector('#startbutton').style.display = 'none';
-        document.querySelector('#setduration').style.display = 'none';
-        document.querySelector('#correctbutton').style.display = 'flex';
-        document.querySelector('#soln').style.display = 'flex';
-        document.querySelector('#passbutton').style.display = 'flex';
-      }
+      changeSoln(msg.solution);
+      // Hide start button and reveal ingame controls
+      const roundctrls = document.querySelectorAll('.roundctrl');
+      roundctrls.forEach((elem) => {
+        elem.style.display = 'none';
+      });
+      const ingamectrls = document.querySelectorAll('.ingamectrl');
+      ingamectrls.forEach((elem) => {
+        elem.style.display = 'flex';
+      });
       break;
 
     case 'change_image':
@@ -96,5 +96,57 @@ function handleMessage(event) {
       document.querySelector('#shown').innerHTML = msg.shown;
       setTimer(msg.endtime);
       break;
+
+    case 'display_controls':
+      // Reveal ctrl panel and solution
+      const ctrls = document.querySelectorAll('.ctrl');
+      ctrls.forEach((elem) => {
+        elem.style.display = 'flex';
+      });
+      break;
   }
 }
+
+const startbtn = document.querySelector('#startbutton');
+const correctbtn = document.querySelector('#correctbutton');
+const passbtn = document.querySelector('#passbutton');
+const undobtn = document.querySelector('#undobutton');
+
+startbtn.addEventListener('click', () => {
+  let msg = JSON.stringify({
+    type: 'start',
+  });
+  if (socketClient.readyState === 1) {
+    socketClient.send(msg);
+  }
+});
+
+correctbtn.addEventListener('click', () => {
+  let msg = JSON.stringify({
+    type: 'change_image',
+    imagectrl: 'correct',
+  });
+  if (socketClient.readyState === 1) {
+    socketClient.send(msg);
+  }
+});
+
+passbtn.addEventListener('click', () => {
+  let msg = JSON.stringify({
+    type: 'change_image',
+    imagectrl: 'pass',
+  });
+  if (socketClient.readyState === 1) {
+    socketClient.send(msg);
+  }
+});
+
+undobtn.addEventListener('click', () => {
+  let msg = JSON.stringify({
+    type: 'change_image',
+    imagectrl: 'undo',
+  });
+  if (socketClient.readyState === 1) {
+    socketClient.send(msg);
+  }
+});

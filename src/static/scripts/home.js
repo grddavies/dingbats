@@ -1,6 +1,6 @@
 const nickname = document.querySelector('#nickname');
 const joinbtn = document.querySelector('#joinbutton');
-const ctrlbtn = document.querySelector('#ctrlbutton');
+const hostbtn = document.querySelector('#hostbutton');
 
 validate = () => {
   var input = nickname;
@@ -63,6 +63,6 @@ fetchTokenRedirect = async (url) => {
 joinbtn.addEventListener('click', () => {
   fetchTokenRedirect('play');
 });
-ctrlbtn.addEventListener('click', () => {
-  fetchTokenRedirect('ctrl');
+hostbtn.addEventListener('click', () => {
+  fetchTokenRedirect('host');
 });

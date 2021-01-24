@@ -7,7 +7,7 @@ const https = require('https');
 const fs = require('fs');
 const db = require('./dataLayer/db');
 const cache = require('./dataLayer/redis');
-const { player, quizmaster, auth  } = require('./routes');
+const { auth, host, home, play } = require('./routes');
 const socketeer = require('./socketeer/socketeer');
 const messageHandler = require('./gameController/messageHandler');
 
@@ -26,26 +26,26 @@ app.use((req, res, next) => {
 app.set('views', 'src/views'); // Set view folder
 app.engine('hbs', exphbs({ extname: 'hbs' })); // Set up Handlebars view engine
 app.set('view engine', 'hbs');
-// Use Helmet (for setting HTTP headers)
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      // allow MDL scripts to run
-      'script-src': ["'self'", 'https://code.getmdl.io/1.3.0/material.min.js'],
-    },
-  }),
-);
+// // Use Helmet (for setting HTTP headers)
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+//       // allow MDL scripts to run
+//       'script-src': ["'self'", 'code.getmdl.io', "unsafe-inline"],
+//       'style-src': ["'self'", "code.getmdl.io", "fonts.googleapis.com"],
+//     },
+//   }),
+// );
 
 db.start();
 cache.start();
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+app.get('/', home);
 app.post('/auth', auth.route);
-app.get('/play', auth.verifyToken, player);
-app.get('/ctrl', auth.verifyToken, quizmaster);
+app.get('/play', auth.verifyToken, play);
+app.get('/host', auth.verifyToken, host.get);
+app.post('/host', auth.verifyToken, host.post);
 
 // Set server to listen
 server = https.createServer(
@@ -64,7 +64,6 @@ app.listen(httpPort, () => console.log(`HTTP listening to port ${httpPort}`));
 
 const gracefulShutdown = () => {
   Promise.all([db.teardown(), cache.teardown()])
-    .catch(() => {})
     .then(() => process.exit());
 };
 

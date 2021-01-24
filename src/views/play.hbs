@@ -1,13 +1,35 @@
 <script defer src="scripts/nickname.js"></script>
 <script defer src="scripts/ws_play.js"></script>
+<script defer src="scripts/ctrl.js"></script>
 <span id="statusdot" class="dot"></span>
 <div class="vcontainer">
     <h1 id="nickname"></h1>
     <div>
         <img id="image" class="center" src="images/newgame.png" alt="Dingbat clue">
     </div>
-    <div class="hcontainer">
+    <div id="soln" class="center ctrl"></div>
+    <div class="hcontainer" style="margin-top: 20px;">
         <span id="time" class="timer">--:--</span>
         <span>SCORE: <span id="score">0</span>/<span id="shown">0</span> </span>
+    </div>
+
+    <div class="center ctrl panel">
+        <button class="roundctrl mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+            id="startbutton">
+            Start Game
+        </button>
+
+        <button class="ingamectrl mdl-button mdl-js-button mdl-js-ripple-effect mdl-button" id="undobutton">
+            Undo
+        </button>
+
+        <button class="ingamectrl mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button"
+            id="correctbutton">
+            Correct
+        </button>
+
+        <button class="ingamectrl mdl-button mdl-js-button mdl-js-ripple-effect mdl-button" id="passbutton">
+            Pass
+        </button>
     </div>
 </div>

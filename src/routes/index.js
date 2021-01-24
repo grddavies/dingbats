@@ -1,5 +1,6 @@
 module.exports = {
-  player: require('./player'),
-  quizmaster: require('./quizmaster'),
-  auth: require('./auth')
+  play: require('./play'),
+  auth: require('./auth'),
+  host: require('./host'),
+  home: require('./home')
 };

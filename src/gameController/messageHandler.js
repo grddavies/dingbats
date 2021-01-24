@@ -21,8 +21,7 @@ module.exports = async (data, wsid) => {
 };
 
 async function startGame(msg) {
-  let timerLength = msg.duration;
-  let game = gc.newGame(timerLength);
+  let game = await gc.readGame(999);
   // Shuffle all the cards
   await gc.shuffleCards(game);
   // Get first
@@ -45,11 +44,23 @@ async function startGame(msg) {
 async function changeImage(msg) {
   // Read game data
   const game = await gc.readGame(999);
-  // Increment num puzzles shown
-  game.shown++;
-  if (msg.imagectrl == 'correct') {
-    // Inc score if correct
-    game.score++;
+  switch (msg.imagectrl) {
+    // update score/shown
+    case 'correct':
+      game.shown++;
+      game.score++;
+      game.cardScore[game.shown] = 1;
+      break;
+    case 'pass':
+      game.shown++;
+      game.cardScore[game.shown] = 0;
+      break;
+    case 'undo':
+      if (game.shown) {
+        game.score = game.score - game.cardScore[game.shown];
+        game.shown--;
+        break;
+      }
   }
   // Get next puzzle
   const nextPuzzle = await gc.nextPuzzle(game);
@@ -90,6 +101,12 @@ async function joinGame(msg, wsid) {
       endtime: game.curRoundEnd,
     });
     socketeer.send(res, wsid);
+    // Look up host's wsid
+    if (wsid == game.players[game.host]) {
+      socketeer.send(JSON.stringify({
+        type: 'display_controls'
+      }), wsid);
+    }
     gc.writeGame(game);
   }
 }
