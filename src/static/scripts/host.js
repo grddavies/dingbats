@@ -17,9 +17,7 @@ fetchbtn.addEventListener('click', () => {
 copybtn.addEventListener('click', () => {
   const gamecode = document.querySelector('#gamecode');
   const snackbarContainer = document.querySelector('#snackbar');
-  let range = document.createRange();
-  range.selectNode(gamecode);
-  window.getSelection().addRange(range);
+  navigator.clipboard.writeText(gamecode.innerHTML);
   var data = { message: '' };
   try {
     let copied = document.execCommand('copy');
