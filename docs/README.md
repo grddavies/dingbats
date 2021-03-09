@@ -4,19 +4,19 @@ Dingbats is real-time word puzzle web app to be played whilst video/phone confer
 
 ## Demo
 
-1. Select host from the main menu
+1. Select _Host Game_ from the main menu
 
     <img src="imgs/index_screenshot.png" width="500"/>
 
-2. Host a game by choosing a round countdown and max players
+2. Host a game by choosing a round duration and the max number of players that can join
 
     <img src="imgs/setup_1.png" width="500"/>
 
-3. Copy the code for player to join the game you are hosting
+3. Copy the code for players to join the game you are hosting
 
     <img src="imgs/setup_2.png" width="500"/>
 
-4. Click through play to be taken to the game. Share the code with your friends via a 3rd party conferencing service to let them join the game. Game participants will not see the puzzle answer (_Parting Gift_) or the control buttons, but will have their view live updated as the game host clicks _Pass/Correct/Undo_.
+4. Click _Play_ to be taken to the game. Share the code with your friends via a 3rd party conferencing service to let them join the game. Game participants will not see the puzzle answer (_Parting Gift_) or the control buttons, but will have their view of the puzzle image, score and timer updated as the game host clicks _Pass/Correct/Undo_.
 
     <img src="imgs/play_host.png" width="500"/>
 
