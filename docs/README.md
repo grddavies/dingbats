@@ -12,7 +12,7 @@ Dingbats is real-time word puzzle web app to be played whilst video/phone confer
 
     <img src="imgs/setup_1.png" width="500"/>
 
-3. Get copy the join code for player to join the game you are hosting
+3. Copy the code for player to join the game you are hosting
 
     <img src="imgs/setup_2.png" width="500"/>
 
